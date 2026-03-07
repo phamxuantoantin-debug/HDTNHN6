@@ -1,212 +1,137 @@
-<!doctype html>
-<html lang="vi" class="h-full">
+<!DOCTYPE html>
+<html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Giải Mã Làng Nghề</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
-  <style>
-    * { font-family: 'Nunito', sans-serif; box-sizing: border-box; }
-    .font-title { font-family: 'Montserrat', sans-serif; }
+    <meta charset="UTF-8">
+    <title>Đấu Trường Làng Nghề - Đối Đầu Tốc Độ</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; font-family: 'Lexend', sans-serif; }
+        body { background: #1a1a2e; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        
+        .header-wrapper { display: flex; align-items: center; padding: 12px 20px; background: #0581be; border-bottom: 4px solid #00adef; z-index: 100; }
+        .logo-img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #eee; background: white; }
+        .title-content { flex-grow: 1; text-align: center; margin-right: 50px; }
+        .title-content h1 { font-size: 20px; font-weight: 900; color: #0ce73c; text-transform: uppercase; }
 
-    .header-wrapper {
-        display: flex; align-items: center; padding: 15px 20px;
-        background: #0581be; border-bottom: 2px solid #00adef;
-    }
-    .logo-img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #eee; background: white; }
-    .title-content { flex-grow: 1; text-align: center; margin-right: 60px; }
-    .title-content h1 { margin: 0; font-size: 20px; font-weight: 800; color: #0ce73c; text-transform: uppercase; line-height: 1.2; }
-
-    .fade-out { opacity: 0 !important; visibility: hidden; transform: scale(0.9); transition: all 0.4s ease; }
-    .correct-reveal {
-      background: linear-gradient(135deg, #00c853 0%, #00e676 100%) !important;
-      transform: scale(1.05);
-      z-index: 20;
-      border: 3px solid white !important;
-      box-shadow: 0 0 30px rgba(0, 230, 118, 0.5);
-    }
-    .glass-card { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); border: 2px solid rgba(255, 215, 0, 0.3); }
-    .gradient-text {
-      background: linear-gradient(135deg, #FFD700, #FFA500);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .selected-border { border: 5px solid #fff !important; box-shadow: 0 0 20px #fff; }
-  </style>
+        #game-screen { flex: 1; display: none; flex-direction: row; overflow: hidden; }
+        .lane { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; color: white; overflow-y: auto; }
+        #lane1 { background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); border-right: 4px solid #fff; }
+        #lane2 { background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%); }
+        
+        .q-card { background: #ffffff; color: #1a1a2e; padding: 20px; border-radius: 20px; width: 95%; margin-bottom: 20px; font-weight: 900; text-align: center; font-size: 1.4rem; line-height: 1.3; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .options-container { display: flex; flex-direction: column; width: 95%; align-items: center; }
+        .opt { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; cursor: pointer; margin: 8px 0; width: 100%; text-align: center; transition: 0.2s; font-weight: 700; font-size: 1.2rem; border: 1px solid rgba(255,255,255,0.2); word-wrap: break-word; }
+        .opt:hover { background: rgba(255,255,255,0.2); }
+        .selected { pointer-events: none; }
+    </style>
 </head>
-<body class="h-full bg-[#1a1a2e] overflow-hidden">
-  <div id="app" class="h-full w-full flex flex-col" style="background: radial-gradient(circle, #1a1a2e 0%, #0a0a14 100%);">
-    
-    <div class="header-wrapper">
-        <img src="https://lh3.googleusercontent.com/u/0/d/1pvgGXoH3PeMQsKQz1SN7R02gTudoNvHR" alt="Logo" class="logo-img">
-        <div class="title-content">
-            <h1 class="font-title">CHỦ ĐỀ 7: TÌM HIỂU CÁC LÀNG NGHỀ TRUYỀN THỐNG Ở VIỆT NAM</h1>
-        </div>
+<body>
+
+<div class="header-wrapper">
+    <img src="https://lh3.googleusercontent.com/u/0/d/1pvgGXoH3PeMQsKQz1SN7R02gTudoNvHR" alt="Logo" class="logo-img">
+    <div class="title-content">
+        <h1>GIẢI MÃ LÀNG NGHỀ: ĐẤU TRƯỜNG TỐC ĐỘ</h1>
     </div>
+</div>
 
-    <div id="start-screen" class="flex-grow flex flex-col items-center justify-center p-6 text-center">
-      <div class="text-7xl mb-4 animate-bounce">🏺</div>
-      <h1 class="text-5xl md:text-6xl font-black font-title gradient-text mb-6">GIẢI MÃ LÀNG NGHỀ</h1>
-      <button onclick="startGame()" class="text-2xl font-bold py-4 px-10 rounded-full text-gray-900 bg-gradient-to-r from-yellow-400 to-orange-500 shadow-xl hover:scale-105 transition-all">
-        🚀 BẮT ĐẦU CHƠI
-      </button>
+<div id="start-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center text-white" style="background: radial-gradient(circle at center, #1a1a2e 0%, #050508 100%);">
+    <div class="flex flex-col items-center mb-8">
+        <img src="https://lh3.googleusercontent.com/u/0/d/1pvgGXoH3PeMQsKQz1SN7R02gTudoNvHR" alt="Logo" class="w-24 h-24 rounded-full border-4 border-white mb-4 shadow-2xl">
+        <h1 class="text-3xl font-black text-[#0ce73c] uppercase tracking-widest">Giải mã làng nghề</h1>
     </div>
+    <div class="text-[100px] mb-6 animate-bounce">⚔️</div>
+    <h1 class="text-6xl font-black uppercase tracking-[0.2em] mb-2" style="background: linear-gradient(to bottom, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Đấu trường</h1>
+    <h2 class="text-3xl font-black text-yellow-500 uppercase tracking-[0.5em] mb-12">Tốc độ</h2>
+    <button onclick="startGame()" class="px-16 py-6 text-2xl font-black bg-yellow-400 text-black rounded-full hover:scale-110 transition shadow-[0_0_30px_rgba(250,204,21,0.4)]">BẮT ĐẦU KHAI CHIẾN</button>
+</div>
 
-    <div id="question-screen" class="flex-grow flex flex-col p-6 hidden">
-      <div class="flex justify-between items-center mb-6">
-        <div class="glass-card rounded-xl px-4 py-2 text-xl font-bold text-white">Câu <span id="current-q">1</span>/5</div>
-        <div class="glass-card rounded-xl px-6 py-2"><span id="timer" class="text-3xl font-black text-green-400">20</span></div>
-        <div class="glass-card rounded-xl px-4 py-2 text-xl font-bold text-yellow-400">⭐ <span id="score">0</span></div>
-      </div>
-
-      <div class="glass-card rounded-3xl p-8 mb-6 flex-grow flex items-center justify-center">
-        <h2 id="question-text" class="text-3xl md:text-4xl font-bold text-white text-center leading-snug"></h2>
-      </div>
-
-      <div id="answers-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 h-[35%]"></div>
-
-      <div class="mt-6 flex gap-4">
-        <button id="check-btn" onclick="reveal()" class="hidden w-full py-4 rounded-2xl text-2xl font-bold text-white bg-green-600 shadow-lg hover:bg-green-500">
-          ✅ KIỂM TRA ĐÁP ÁN
-        </button>
-        <button id="next-btn" onclick="nextQuestion()" class="hidden w-full py-4 rounded-2xl text-2xl font-bold text-gray-900 bg-yellow-400 shadow-lg hover:bg-yellow-300">
-          TIẾP THEO ➡️
-        </button>
-      </div>
+<div id="game-screen">
+    <div id="lane1" class="lane">
+        <div class="text-3xl font-black mb-4">ĐỘI 1</div>
+        <div id="q1" class="q-card"></div>
+        <div id="o1" class="options-container"></div>
     </div>
-
-    <div id="result-screen" class="flex-grow flex flex-col items-center justify-center p-6 hidden text-center">
-        <div class="text-8xl mb-6">🏆</div>
-        <h2 class="text-6xl font-black font-title gradient-text mb-4">HOÀN THÀNH</h2>
-        <p id="result-message" class="text-3xl text-white mb-8"></p>
-        <button onclick="location.reload()" class="text-2xl font-bold py-4 px-12 rounded-full bg-white text-black">🔄 CHƠI LẠI</button>
+    <div id="lane2" class="lane">
+        <div class="text-3xl font-black mb-4">ĐỘI 2</div>
+        <div id="q2" class="q-card"></div>
+        <div id="o2" class="options-container"></div>
     </div>
-  </div>
+</div>
 
-  <script>
+<div id="result-screen" class="fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black/95 text-white p-10">
+    <div id="res-content" class="text-center w-full max-w-2xl"></div>
+    <button onclick="location.reload()" class="mt-12 py-5 px-16 bg-white text-black font-black text-xl rounded-full hover:scale-105 transition">CHƠI LẠI</button>
+</div>
+
+<script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(type === 'correct' ? 600 : 200, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(type === 'correct' ? 1000 : 100, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+    }
+
     const questions = [
-      { q: "Làng gốm Lái Thiêu thuộc tỉnh nào?", a: ["A. Hà Nội", "B. Thừa Thiên Huế", "C. Thành phố Hồ Chí Minh", "D. Đồng Nai"], c: 2 },
-      { q: "Bước nào thuộc quy trình làm nón Tây Hồ?", a: ["A. Tráng men", "B. Chằm (khâu) nón", "C. Nung lò", "D. Nhào đất"], c: 1 },
-      { q: "Vật liệu tạo khung nón Tây Hồ?", a: ["A. Thép", "B. Tre", "C. Nhựa", "D. Đồng"], c: 1 },
-      { q: "Nguyên liệu chính làm tò he Xuân La?", a: ["A. Đất sét", "B. Lá cọ", "C. Bột gạo nếp", "D. Tre khô"], c: 2 },
-      { q: "Vì sao không được chạm vào lò nung?", a: ["A. Dễ hỏng đồ", "B. Nhiệt độ cao gây bỏng", "C. Tốn điện", "D. Bẩn tay"], c: 1 }
+        { q: "Biện pháp quan trọng nhất giữ gìn nghề?", a: ["Triển lãm", "Truyền nghề", "Quảng bá", "Hướng nghiệp"], c: 1 },
+        { q: "Lợi ích của hội thi nghề là gì?", a: ["Giao lưu", "Quảng bá", "Tôn vinh", "Tất cả đúng"], c: 3 },
+        { q: "Tại sao cần cộng đồng dùng sản phẩm?", a: ["Tạo đầu ra", "Bảo tồn", "Tăng thu nhập", "Tất cả đúng"], c: 3 },
+        { q: "Thái độ tốt nhất khi thực hành nghề?", a: ["Tỉ mỉ", "Làm cho xong", "Nhờ bạn", "Bỏ dở"], c: 0 },
+        { q: "HS lớp 6 góp phần giữ gìn nghề bằng cách?", a: ["Chỉ xem", "Chỉ mua", "Tuyên truyền/Sáng tạo", "Không làm gì"], c: 2 }
     ];
 
-    let currentIdx = 0, score = 0, timer = 20, interval, canAnswer = true;
-    let selectedIdx = null; // Lưu lựa chọn của người dùng
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-    function playSound() {
-      const notes = [523, 659, 783, 1046];
-      notes.forEach((f, i) => {
-        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-        o.connect(g); g.connect(audioCtx.destination);
-        o.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.1);
-        g.gain.setValueAtTime(0.1, audioCtx.currentTime + i * 0.1);
-        g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + i * 0.1 + 0.4);
-        o.start(audioCtx.currentTime + i * 0.1); o.stop(audioCtx.currentTime + i * 0.1 + 0.4);
-      });
-    }
+    let p1 = { q: [...questions].sort(() => Math.random() - 0.5), idx: 0, score: 0, startTime: 0, finishTime: 0 };
+    let p2 = { q: [...questions].sort(() => Math.random() - 0.5), idx: 0, score: 0, startTime: 0, finishTime: 0 };
+    let finishedCount = 0;
 
     function startGame() {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      document.getElementById('start-screen').classList.add('hidden');
-      document.getElementById('question-screen').classList.remove('hidden');
-      showQuestion();
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('game-screen').style.display = 'flex';
+        p1.startTime = Date.now(); p2.startTime = Date.now();
+        renderQ(1); renderQ(2);
     }
 
-    function showQuestion() {
-      canAnswer = true;
-      selectedIdx = null;
-      const qD = questions[currentIdx];
-      document.getElementById('current-q').textContent = currentIdx + 1;
-      document.getElementById('question-text').textContent = qD.q;
-      
-      const container = document.getElementById('answers-container');
-      container.innerHTML = '';
-      
-      const colors = ['#e53935', '#1e88e5', '#43a047', '#fb8c00'];
-      qD.a.forEach((ans, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'answer-btn w-full h-full rounded-xl text-xl md:text-2xl font-bold text-white border-2 border-white/10 shadow-md transition-all';
-        btn.style.backgroundColor = colors[i];
-        btn.textContent = ans;
-        btn.onclick = () => selectAnswer(i, btn);
-        container.appendChild(btn);
-      });
-      document.getElementById('next-btn').classList.add('hidden');
-      document.getElementById('check-btn').classList.add('hidden');
-      startTimer();
-    }
-
-    function startTimer() {
-      timer = 20;
-      const tEl = document.getElementById('timer');
-      tEl.textContent = timer;
-      tEl.className = "text-3xl font-black text-green-400";
-      clearInterval(interval);
-      interval = setInterval(() => {
-        timer--;
-        tEl.textContent = timer;
-        if (timer <= 5) tEl.className = "text-3xl font-black text-red-500 animate-pulse";
-        if (timer <= 0) { 
-            clearInterval(interval); 
-            canAnswer = false;
-            document.getElementById('check-btn').classList.remove('hidden'); // Hiện nút kiểm tra khi hết giờ
+    function renderQ(team) {
+        let p = (team === 1) ? p1 : p2;
+        let qEl = document.getElementById('q' + team);
+        let oEl = document.getElementById('o' + team);
+        if(p.idx >= p.q.length) {
+            p.finishTime = Date.now(); finishedCount++;
+            qEl.innerText = "HOÀN THÀNH!"; oEl.innerHTML = "";
+            if(finishedCount === 2) showResult();
+            return;
         }
-      }, 1000);
-    }
-
-    function selectAnswer(i, btn) {
-      if (!canAnswer) return;
-      
-      // Xóa highlight của các nút khác
-      document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected-border'));
-      // Highlight nút đang chọn
-      btn.classList.add('selected-border');
-      selectedIdx = i;
-
-      clearInterval(interval);
-      canAnswer = false;
-      document.getElementById('check-btn').classList.remove('hidden'); // Hiện nút kiểm tra sau khi chọn
-    }
-
-    function reveal() {
-      playSound();
-      const cIdx = questions[currentIdx].c;
-      
-      // Cộng điểm nếu chọn đúng trước khi bấm kiểm tra
-      if (selectedIdx === cIdx) {
-        score += 20;
-        document.getElementById('score').textContent = score;
-      }
-
-      const btns = document.querySelectorAll('.answer-btn');
-      btns.forEach((b, i) => {
-        if (i === cIdx) {
-            b.classList.remove('selected-border');
-            b.classList.add('correct-reveal');
-        } else {
-            b.classList.add('fade-out');
-        }
-      });
-      
-      document.getElementById('check-btn').classList.add('hidden');
-      document.getElementById('next-btn').classList.remove('hidden');
-    }
-
-    function nextQuestion() {
-      currentIdx++;
-      if (currentIdx < questions.length) showQuestion();
-      else showResult();
+        qEl.innerText = p.q[p.idx].q;
+        oEl.innerHTML = "";
+        p.q[p.idx].a.forEach((txt, i) => {
+            let btn = document.createElement('div');
+            btn.className = "opt"; btn.innerText = txt;
+            btn.onclick = () => {
+                btn.classList.add('selected');
+                if(i === p.q[p.idx].c) { playSound('correct'); p.score += 20; btn.style.background = "#f1c40f"; btn.style.color = "black"; }
+                else { playSound('wrong'); btn.style.background = "#c0392b"; }
+                setTimeout(() => { p.idx++; renderQ(team); }, 600);
+            };
+            oEl.appendChild(btn);
+        });
     }
 
     function showResult() {
-      document.getElementById('question-screen').classList.add('hidden');
-      document.getElementById('result-screen').classList.remove('hidden');
-      document.getElementById('result-message').textContent = `BẠN ĐÃ ĐẠT ĐƯỢC ${score} ĐIỂM`;
+        document.getElementById('result-screen').style.display = 'flex';
+        let t1 = ((p1.finishTime - p1.startTime)/1000).toFixed(2);
+        let t2 = ((p2.finishTime - p2.startTime)/1000).toFixed(2);
+        let winner = (p1.score > p2.score || (p1.score === p2.score && t1 < t2)) ? "ĐỘI 1 CHIẾN THẮNG!" : (p2.score > p1.score || (p2.score === p1.score && t2 < t1) ? "ĐỘI 2 CHIẾN THẮNG!" : "HÒA NHAU!");
+        document.getElementById('res-content').innerHTML = `
+            <h2 class="text-5xl font-black mb-10 text-yellow-400">${winner}</h2>
+            <div class="bg-white/10 p-8 rounded-3xl border border-white/20 text-2xl font-bold">
+                <p class="mb-4">Đội 1: <span class="text-orange-400">${p1.score} điểm - ${t1}s</span></p>
+                <p>Đội 2: <span class="text-green-400">${p2.score} điểm - ${t2}s</span></p>
+            </div>`;
     }
-  </script>
+</script>
 </body>
 </html>
