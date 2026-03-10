@@ -2,134 +2,213 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>CHỦ ĐỀ 7: TÌM HIỂU LÀNG NGHỀ TRUYỀN THỐNG Ở VIỆT NAM</title>
-    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải Mã Hình Nón - TIẾP SỨC TOÁN HỌC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; font-family: 'Lexend', sans-serif; }
+        * { box-sizing: border-box; font-family: 'Nunito', sans-serif; margin: 0; padding: 0; }
         body { background: #1a1a2e; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         
-        .header-wrapper { display: flex; align-items: center; padding: 12px 20px; background: #0581be; border-bottom: 4px solid #00adef; z-index: 100; }
+        /* HEADER ĐẶC TRƯNG */
+        .header-wrapper {
+            display: flex; align-items: center; padding: 10px 20px;
+            background: #0581be; border-bottom: 3px solid #00adef; z-index: 100;
+        }
         .logo-img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #eee; background: white; }
-        .title-content { flex-grow: 1; text-align: center; margin-right: 50px; }
-        .title-content h1 { font-size: 20px; font-weight: 900; color: #0ce73c; text-transform: uppercase; }
+        .title-content { flex-grow: 1; text-align: center; }
+        .title-content h1 { 
+            font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 900; 
+            color: #0ce73c; text-transform: uppercase; line-height: 1.2; letter-spacing: 1px;
+        }
 
-        #game-screen { flex: 1; display: none; flex-direction: row; overflow: hidden; }
-        .lane { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; color: white; overflow-y: auto; }
-        #lane1 { background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); border-right: 4px solid #fff; }
+        /* GIAO DIỆN CHỜ */
+        #start-screen {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: radial-gradient(circle, #1a1a2e 0%, #0a0a14 100%); color: white; text-align: center;
+        }
+        .vs-logo { font-size: 100px; margin-bottom: 10px; animation: pulse 1.5s infinite; }
+        .game-title { 
+            font-family: 'Montserrat', sans-serif; font-size: 55px; font-weight: 900;
+            background: linear-gradient(135deg, #FFD700, #FFA500); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; margin-bottom: 5px;
+        }
+        .teams-preview { display: flex; gap: 30px; margin: 30px 0; width: 85%; }
+        .team-card { flex: 1; padding: 25px; border-radius: 20px; border: 3px solid rgba(255,255,255,0.2); }
+        #p1-card { background: linear-gradient(135deg, #e67e22, #d35400); }
+        #p2-card { background: linear-gradient(135deg, #27ae60, #1e8449); }
+        .start-btn {
+            font-family: 'Montserrat', sans-serif; font-size: 24px; font-weight: 900; padding: 15px 60px;
+            border-radius: 50px; border: none; cursor: pointer; text-transform: uppercase;
+            background: linear-gradient(to right, #FFD700, #FFA500); color: #1a1a2e;
+            box-shadow: 0 5px 20px rgba(255,215,0,0.4); transition: 0.3s;
+        }
+        .start-btn:hover { transform: scale(1.05); }
+
+        /* GIAO DIỆN THI ĐẤU */
+        #game-screen { flex: 1; display: none; }
+        .lane { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; position: relative; }
+        #lane1 { background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); border-right: 2px solid rgba(255,255,255,0.3); }
         #lane2 { background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%); }
         
-        .q-card { background: #ffffff; color: #1a1a2e; padding: 20px; border-radius: 20px; width: 95%; margin-bottom: 20px; font-weight: 900; text-align: center; font-size: 1.4rem; line-height: 1.3; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        .options-container { display: flex; flex-direction: column; width: 95%; align-items: center; }
-        .opt { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; cursor: pointer; margin: 8px 0; width: 100%; text-align: center; transition: 0.2s; font-weight: 700; font-size: 1.2rem; border: 1px solid rgba(255,255,255,0.2); word-wrap: break-word; }
-        .opt:hover { background: rgba(255,255,255,0.2); }
-        .selected { pointer-events: none; }
+        .score { font-size: 50px; font-weight: 900; font-family: 'Montserrat', sans-serif; color: white; margin-top: -100px;}
+        .progress { color: white; opacity: 0.8; margin-bottom: 20px; }
+        .q-card { background: white; color: #2c3e50; padding: 25px; border-radius: 20px; width: 90%; min-height: 100px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 20px; font-weight: 800; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .options { display: grid; grid-template-columns: 1fr; gap: 12px; width: 90%; }
+        .opt { background: rgba(255,255,255,0.15); color: white; padding: 18px; border-radius: 12px; cursor: pointer; border: 2px solid rgba(255,255,255,0.4); font-weight: bold; transition: 0.2s; text-align: center; font-size: 18px; }
+        .correct { background: #f1c40f !important; color: black !important; border-color: #f1c40f; box-shadow: 0 0 20px #f1c40f; }
+        .wrong { background: #c0392b !important; opacity: 0.7; }
+
+        /* MÀN HÌNH KẾT QUẢ CHUNG */
+        #final-result {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .winner-announcement { font-family: 'Montserrat'; font-size: 40px; color: #f1c40f; text-align: center; margin-bottom: 30px; line-height: 1.5; }
+        .stats-table { width: 60%; color: white; border-collapse: collapse; margin-bottom: 30px; font-size: 20px; }
+        .stats-table th, .stats-table td { border: 1px solid rgba(255,255,255,0.2); padding: 15px; text-align: center; }
+        .stats-table th { background: #0581be; }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-<div class="header-wrapper">
-    <img src="https://lh3.googleusercontent.com/u/0/d/1pvgGXoH3PeMQsKQz1SN7R02gTudoNvHR" alt="Logo" class="logo-img">
-    <div class="title-content">
-        <h1> CHỦ ĐỀ 7: TÌM HIỂU NGHỀ TRUYỀN THỐNG Ở VIỆT NAM</h1>
+    <div class="header-wrapper">
+        <img src="https://lh3.googleusercontent.com/u/0/d/1pvgGXoH3PeMQsKQz1SN7R02gTudoNvHR" alt="Logo" class="logo-img">
+        <div class="title-content">
+            <h1>GIẢI MÃ HÌNH NÓN: TIẾP SỨC TOÁN HỌC</h1>
+        </div>
     </div>
-</div>
 
-<div id="start-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center text-white" style="background: radial-gradient(circle at center, #1a1a2e 0%, #050508 100%);">
-    <div class="flex flex-col items-center mb-8">
-        
+    <div id="start-screen">
+        <div class="vs-logo">🏺 VS 🍦</div>
+        <h1 class="game-title">TIẾP SỨC TOÁN HỌC</h1>
+        <div class="teams-preview">
+            <div class="team-card" id="p1-card">
+                <h2 style="font-family:Montserrat">ĐỘI NÓN LÁ</h2>
+                <p>Ưu tiên Chính xác - Bứt phá Tốc độ!</p>
+            </div>
+            <div class="team-card" id="p2-card">
+                <h2 style="font-family:Montserrat">ĐỘI KEM ỐC QUẾ</h2>
+                <p>Tỉnh táo tư duy - Về đích đầu tiên!</p>
+            </div>
+        </div>
+        <button class="start-btn" onclick="startGame()">🚀 BẮT ĐẦU TUYÊN CHIẾN</button>
     </div>
-    <h1 class="text-6xl font-black text-[#0ce73c] uppercase tracking-widest">SỨ GIẢ LÀNG NGHỀ</h1>
-    <h2 class="text-3xl font-black text-yellow-500 uppercase tracking-[0.5em] mb-12">Tốc độ</h2>
-    <button onclick="startGame()" class="px-16 py-6 text-2xl font-black bg-yellow-400 text-black rounded-full hover:scale-110 transition shadow-[0_0_30px_rgba(250,204,21,0.4)]">BẮT ĐẦU TRANH TÀI</button>
-</div>
 
-<div id="game-screen">
-    <div id="lane1" class="lane">
-        <div class="text-3xl font-black mb-4">ĐỘI 1</div>
-        <div id="q1" class="q-card"></div>
-        <div id="o1" class="options-container"></div>
+    <div id="game-screen">
+        <div id="lane1" class="lane"><div class="score" id="s1">0</div><div class="progress" id="p1">Câu 1/10</div><div class="q-card" id="q1">...</div><div class="options" id="opts1"></div></div>
+        <div id="lane2" class="lane"><div class="score" id="s2">0</div><div class="progress" id="p2">Câu 1/10</div><div class="q-card" id="q2">...</div><div class="options" id="opts2"></div></div>
     </div>
-    <div id="lane2" class="lane">
-        <div class="text-3xl font-black mb-4">ĐỘI 2</div>
-        <div id="q2" class="q-card"></div>
-        <div id="o2" class="options-container"></div>
+
+    <div id="final-result">
+        <div class="winner-announcement" id="winner-text"></div>
+        <table class="stats-table">
+            <thead><tr><th>Đội</th><th>Điểm số</th><th>Thời gian</th></tr></thead>
+            <tbody>
+                <tr><td>Nón Lá</td><td id="res-s1">0</td><td id="res-t1">0s</td></tr>
+                <tr><td>Kem Ốc Quế</td><td id="res-s2">0</td><td id="res-t2">0s</td></tr>
+            </tbody>
+        </table>
+        <button class="start-btn" onclick="location.reload()">🔄 CHƠI LẠI</button>
     </div>
-</div>
 
-<div id="result-screen" class="fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black/95 text-white p-10">
-    <div id="res-content" class="text-center w-full max-w-2xl"></div>
-    <button onclick="location.reload()" class="mt-12 py-5 px-16 bg-white text-black font-black text-xl rounded-full hover:scale-105 transition">CHƠI LẠI</button>
-</div>
-
-<script>
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(type) {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.frequency.setValueAtTime(type === 'correct' ? 600 : 200, audioCtx.currentTime);
-        osc.frequency.linearRampToValueAtTime(type === 'correct' ? 1000 : 100, audioCtx.currentTime + 0.2);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-    }
-
-    const questions = [
-        { q: "Biện pháp quan trọng nhất giữ gìn nghề truyền thống là gì?", a: ["Triển lãm", "Truyền nghề", "Quảng bá", "Hướng nghiệp"], c: 1 },
-        { q: "Lợi ích của việc tổ chức các hội thi nghề truyền thống là gì?", a: ["Giao lưu", "Quảng bá", "Tôn vinh", "Tất cả đúng"], c: 3 },
-        { q: "Tại sao cần khuyến khích cộng đồng sử dụng các sản phẩm làng nghề?", a: ["Tạo đầu ra cho sản phẩm", "Góp phần bảo tồn văn hóa", "Tăng thu nhập cho người dân", "Tất cả các phương án trên"], c: 3 },
-        { q: "Thái độ tốt nhất khi tham gia thực hành các nghề truyền thống là gì?", a: ["Tỉ mỉ, cẩn thận từng công đoạn", "Làm nhanh cho xong việc.", "Nhờ bạn làm hộ phần khó", "Bỏ dở khi thấy phức tạp"], c: 0 },
-        { q: "HS lớp 6 góp phần giữ gìn nghề bằng cách?", a: ["Chỉ xem chứ không tham gia", "Chỉ mua sản phẩm khi cần", "Tuyên truyền và quảng bá sản phẩm", "Không làm gì vì còn nhỏ."], c: 2 }
-    ];
-
-    let p1 = { q: [...questions].sort(() => Math.random() - 0.5), idx: 0, score: 0, startTime: 0, finishTime: 0 };
-    let p2 = { q: [...questions].sort(() => Math.random() - 0.5), idx: 0, score: 0, startTime: 0, finishTime: 0 };
-    let finishedCount = 0;
-
-    function startGame() {
-        document.getElementById('start-screen').style.display = 'none';
-        document.getElementById('game-screen').style.display = 'flex';
-        p1.startTime = Date.now(); p2.startTime = Date.now();
-        renderQ(1); renderQ(2);
-    }
-
-    function renderQ(team) {
-        let p = (team === 1) ? p1 : p2;
-        let qEl = document.getElementById('q' + team);
-        let oEl = document.getElementById('o' + team);
-        if(p.idx >= p.q.length) {
-            p.finishTime = Date.now(); finishedCount++;
-            qEl.innerText = "HOÀN THÀNH!"; oEl.innerHTML = "";
-            if(finishedCount === 2) showResult();
-            return;
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSfx(type) {
+            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+            if(type === 'correct') { o.type = 'sine'; o.frequency.setValueAtTime(523, audioCtx.currentTime); o.frequency.exponentialRampToValueAtTime(1046, audioCtx.currentTime + 0.3); g.gain.setValueAtTime(0.2, audioCtx.currentTime); }
+            else if(type === 'wrong') { o.type = 'sawtooth'; o.frequency.setValueAtTime(150, audioCtx.currentTime); g.gain.setValueAtTime(0.2, audioCtx.currentTime); }
+            else { o.frequency.setValueAtTime(60, audioCtx.currentTime); o.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1); g.gain.setValueAtTime(0.1, audioCtx.currentTime); }
+            o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + (type==='heart'?0.1:0.3));
         }
-        qEl.innerText = p.q[p.idx].q;
-        oEl.innerHTML = "";
-        p.q[p.idx].a.forEach((txt, i) => {
-            let btn = document.createElement('div');
-            btn.className = "opt"; btn.innerText = txt;
-            btn.onclick = () => {
-                btn.classList.add('selected');
-                if(i === p.q[p.idx].c) { playSound('correct'); p.score += 20; btn.style.background = "#f1c40f"; btn.style.color = "black"; }
-                else { playSound('wrong'); btn.style.background = "#c0392b"; }
-                setTimeout(() => { p.idx++; renderQ(team); }, 600);
-            };
-            oEl.appendChild(btn);
-        });
-    }
 
-    function showResult() {
-        document.getElementById('result-screen').style.display = 'flex';
-        let t1 = ((p1.finishTime - p1.startTime)/1000).toFixed(2);
-        let t2 = ((p2.finishTime - p2.startTime)/1000).toFixed(2);
-        let winner = (p1.score > p2.score || (p1.score === p2.score && t1 < t2)) ? "ĐỘI 1 CHIẾN THẮNG!" : (p2.score > p1.score || (p2.score === p1.score && t2 < t1) ? "ĐỘI 2 CHIẾN THẮNG!" : "HÒA NHAU!");
-        document.getElementById('res-content').innerHTML = `
-            <h2 class="text-5xl font-black mb-10 text-yellow-400">${winner}</h2>
-            <div class="bg-white/10 p-8 rounded-3xl border border-white/20 text-2xl font-bold">
-                <p class="mb-4">Đội 1: <span class="text-orange-400">${p1.score} điểm - ${t1}s</span></p>
-                <p>Đội 2: <span class="text-green-400">${p2.score} điểm - ${t2}s</span></p>
-            </div>`;
-    }
-</script>
+        const dataOrigin = [
+            { q: "Quay tam giác vuông quanh 1 cạnh góc vuông tạo ra hình gì?", a: ["Hình nón", "Hình trụ", "Hình cầu", "Hình hộp"], c: "Hình nón" },
+            { q: "Khoảng cách từ đỉnh đến tâm đáy gọi là gì?", a: ["Chiều cao", "Đường sinh", "Bán kính", "Trục"], c: "Chiều cao" },
+            { q: "Bóng của hình nón khi chiếu từ hông là hình gì?", a: ["Tam giác cân", "Hình tròn", "Hình vuông", "Hình thoi"], c: "Tam giác cân" },
+            { q: "Hệ thức đúng liên hệ r, h, l là?", a: ["l² = r² + h²", "l = r + h", "h² = r² + l²", "r = l + h"], c: "l² = r² + h²" },
+            { q: "Cho r = 3, h = 4. Độ dài đường sinh l là?", a: ["5", "7", "25", "1"], c: "5" },
+            { q: "Khi cắt một hình quạt tròn từ một tấm bìa hình tròn (bán kính R=15 cm) để cuộn thành một chiếc nón có đường kính đáy 18 cm. Chiều cao h của nón là?", a: ["10cm", "12cm", "9cm", "11cm"], c: "12cm" },
+            { q: "Đường nối từ đỉnh đến đường tròn đáy gọi là?", a: ["Đường sinh", "Chiều cao", "Bán kính", "Trục"], c: "Đường sinh" },
+            { q: "Cho l = 10, r = 6. Chiều cao h bằng?", a: ["8", "4", "16", "2"], c: "8" },
+            { q: "Mặt đáy của hình nón là hình gì?", a: ["Hình tròn", "Hình quạt", "Hình elip", "Hình vuông"], c: "Hình tròn" },
+            { q: "Khi trải mặt bên hình nón ra mặt phẳng ta được?", a: ["Hình quạt tròn", "Hình tròn", "Hình vuông", "Hình tam giác"], c: "Hình quạt tròn" }
+        ];
+
+        function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+        let startTime;
+        let state = { 
+            p1: { cur: 0, score: 0, qs: shuffle([...dataOrigin]), time: null }, 
+            p2: { cur: 0, score: 0, qs: shuffle([...dataOrigin]), time: null } 
+        };
+
+        function startGame() {
+            audioCtx.resume();
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-screen').style.display = 'flex';
+            startTime = Date.now();
+            setInterval(() => playSfx('heart'), 1000);
+            load(1); load(2);
+        }
+
+        function load(p) {
+            const s = state['p'+p];
+            if(s.cur >= 10) { 
+                if(!s.time) s.time = (Date.now() - startTime) / 1000;
+                document.getElementById('lane'+p).innerHTML = `<h1 style="font-family:Montserrat; font-size:40px">HOÀN THÀNH!</h1><p>Đang đợi đối thủ...</p>`; 
+                checkFinish();
+                return; 
+            }
+            const d = s.qs[s.cur];
+            document.getElementById('q'+p).innerText = d.q;
+            document.getElementById('p'+p).innerText = `Câu ${s.cur+1}/10`;
+            const b = document.getElementById('opts'+p); b.innerHTML = '';
+            shuffle([...d.a]).forEach(o => {
+                const btn = document.createElement('div'); btn.className = 'opt'; btn.innerText = o;
+                btn.onclick = () => {
+                    if(btn.parentElement.classList.contains('locked')) return;
+                    btn.parentElement.classList.add('locked');
+                    if(o === d.c) { playSfx('correct'); btn.classList.add('correct'); s.score+=10; document.getElementById('s'+p).innerText = s.score; }
+                    else { playSfx('wrong'); btn.classList.add('wrong'); }
+                    setTimeout(() => { s.cur++; btn.parentElement.classList.remove('locked'); load(p); }, 600);
+                };
+                b.appendChild(btn);
+            });
+        }
+
+        function checkFinish() {
+            if(state.p1.time && state.p2.time) {
+                setTimeout(showFinalResult, 1000);
+            }
+        }
+
+        function showFinalResult() {
+            document.getElementById('final-result').style.display = 'flex';
+            document.getElementById('res-s1').innerText = state.p1.score;
+            document.getElementById('res-t1').innerText = state.p1.time.toFixed(2) + 's';
+            document.getElementById('res-s2').innerText = state.p2.score;
+            document.getElementById('res-t2').innerText = state.p2.time.toFixed(2) + 's';
+
+            let winnerText = "";
+            // Logic so sánh: Điểm cao nhất -> Thời gian thấp nhất
+            if (state.p1.score > state.p2.score) {
+                winnerText = "🏆 CHIẾN THẮNG THUỘC VỀ: ĐỘI NÓN LÁ<br>(Điểm số cao hơn)";
+            } else if (state.p2.score > state.p1.score) {
+                winnerText = "🏆 CHIẾN THẮNG THUỘC VỀ: ĐỘI KEM ỐC QUẾ<br>(Điểm số cao hơn)";
+            } else {
+                // Nếu bằng điểm, so sánh thời gian
+                if (state.p1.time < state.p2.time) {
+                    winnerText = "🏆 CHIẾN THẮNG THUỘC VỀ: ĐỘI NÓN LÁ<br>(Cùng điểm - Tốc độ nhanh hơn)";
+                } else if (state.p2.time < state.p1.time) {
+                    winnerText = "🏆 CHIẾN THẮNG THUỘC VỀ: ĐỘI KEM ỐC QUẾ<br>(Cùng điểm - Tốc độ nhanh hơn)";
+                } else {
+                    winnerText = "🤝 KẾT QUẢ HÒA!<br>(Bằng điểm và Bằng thời gian)";
+                }
+            }
+            document.getElementById('winner-text').innerHTML = winnerText;
+        }
+    </script>
 </body>
 </html>
