@@ -150,7 +150,7 @@
 
         function load(p) {
             const s = state['p'+p];
-            if(s.cur >= 10) { 
+            if(s.cur >= 5) { 
                 if(!s.time) s.time = (Date.now() - startTime) / 1000;
                 document.getElementById('lane'+p).innerHTML = `<h1 style="font-family:Montserrat; font-size:40px">HOÀN THÀNH!</h1><p>Đang đợi đối thủ...</p>`; 
                 checkFinish();
